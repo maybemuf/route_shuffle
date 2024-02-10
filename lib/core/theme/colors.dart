@@ -1,0 +1,40 @@
+import 'dart:ui';
+
+class Colors {
+  static const primary = Color(0xFF6200EE);
+  static const primaryVariant = Color(0xFF3700B3);
+  static const secondary = Color(0xFF03DAC6);
+  static const secondaryVariant = Color(0xFF018786);
+  static const background = Color(0xFFFFFFFF);
+  static const surface = Color(0xFFFFFFFF);
+  static const error = Color(0xFFB00020);
+  static const onPrimary = Color(0xFFFFFFFF);
+  static const onSecondary = Color(0xFF000000);
+  static const onBackground = Color(0xFF000000);
+  static const onSurface = Color(0xFF000000);
+  static const onError = Color(0xFFFFFFFF);
+  static const black = Color(0xFF000000);
+  static const white = Color(0xFFFFFFFF);
+  static const grey = Color(0xFFE0E0E0);
+  static const greyDark = Color(0xFF757575);
+  static const greyLight = Color(0xFFBDBDBD);
+  static const greyLighter = Color(0xFFEEEEEE);
+  static const greyDarker = Color(0xFF616161);
+  static const greyDarkest = Color(0xFF424242);
+  static const transparent = Color(0x00000000);
+  static const transparentBlack = Color(0x80000000);
+  static const transparentWhite = Color(0x80FFFFFF);
+  static const transparentGrey = Color(0x80E0E0E0);
+  static const transparentGreyDark = Color(0x80757575);
+  static const transparentGreyLight = Color(0x80BDBDBD);
+  static const transparentGreyLighter = Color(0x80EEEEEE);
+  static const transparentGreyDarker = Color(0x80616161);
+  static const transparentGreyDarkest = Color(0x80424242);
+  static const transparentPrimary = Color(0x806200EE);
+  static const transparentPrimaryVariant = Color(0x803700B3);
+  static const transparentSecondary = Color(0x8003DAC6);
+  static const transparentSecondaryVariant = Color(0x80018786);
+  static const transparentBackground = Color(0x80FFFFFF);
+  static const transparentSurface = Color(0x80FFFFFF);
+  static const transparentError = Color(0x80B00020);
+}
