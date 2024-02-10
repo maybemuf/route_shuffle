@@ -19,6 +19,7 @@ dependencies:
   geolocator: ^10.1.0
   go_router: ^13.2.0
   easy_localization: ^3.0.3
+  logger: ^2.0.2+1
 
 dev_dependencies:
   flutter_test:
