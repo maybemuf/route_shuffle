@@ -5,6 +5,7 @@ linter:
     public_member_api_docs: false
     sort_constructors_first: false
     use_setters_to_change_properties: false
+    one_member_abstracts: false
 
 analyzer:
   plugins:
