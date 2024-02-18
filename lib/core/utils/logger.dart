@@ -1,12 +1,7 @@
-import 'dart:io' as io;
-
 import 'package:logger/logger.dart';
 
 final logger  = Logger(
-  printer: PrettyPrinter(
-    lineLength: io.stdout.terminalColumns,
-    colors: io.stdout.supportsAnsiEscapes,
-  ),
+  printer: PrettyPrinter(),
   filter: ProductionFilter(),
   output: ConsoleOutput(),
 );
