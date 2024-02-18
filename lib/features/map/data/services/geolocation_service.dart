@@ -20,7 +20,7 @@ class GeolocationServiceImpl implements GeolocationService {
     }
 
     // Check if location permissions are granted
-    await checkPermission();
+    await _checkPermission();
 
     final currentPosition = await Geolocator.getCurrentPosition();
 
@@ -30,7 +30,7 @@ class GeolocationServiceImpl implements GeolocationService {
     );
   }
 
-  Future<void> checkPermission() async {
+  Future<void> _checkPermission() async {
     var permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
