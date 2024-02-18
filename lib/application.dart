@@ -10,8 +10,7 @@ class Application extends StatelessWidget {
     return MaterialApp.router(
       theme: lightTheme,
       themeMode: ThemeMode.light,
-      routerDelegate: router.routerDelegate,
-      routeInformationParser: router.routeInformationParser,
+      routerConfig: router,
     );
   }
 }

@@ -3,6 +3,8 @@ linter:
   rules:
     sort_pub_dependencies: false
     public_member_api_docs: false
+    sort_constructors_first: false
+    use_setters_to_change_properties: false
 
 analyzer:
   plugins:
