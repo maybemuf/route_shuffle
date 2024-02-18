@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:route_shuffle/core/providers/bottom_navigation_bar_index_provider.dart';
+import 'package:route_shuffle/features/map/presentation/screens/map_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -12,12 +12,10 @@ class HomeScreen extends ConsumerWidget {
       body: IndexedStack(
         index: ref.watch(bottomNavigationBarIndexProvider),
         children: const [
-          GoogleMap(
-            initialCameraPosition: CameraPosition(target: LatLng(0, 0)),
-          ),
-          Center(
-            child: Text('Profile'),
-          ),
+          MapScreen(),
+          // Center(
+          //   child: Text('Profile'),
+          // ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
