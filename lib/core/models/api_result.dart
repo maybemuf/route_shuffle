@@ -8,3 +8,6 @@ sealed class ApiResult<T> with _$ApiResult<T> {
   const factory ApiResult.success(T data) = Success<T>;
   const factory ApiResult.error(Failure failure) = Error;
 }
+
+Success<T> success<T>(T data) => Success(data);
+Error<T> error<T>(Failure failure) => Error(failure);
