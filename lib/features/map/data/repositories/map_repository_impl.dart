@@ -1,3 +1,4 @@
+import 'package:route_shuffle/core/errors/exceptions.dart';
 import 'package:route_shuffle/core/errors/failure.dart';
 import 'package:route_shuffle/core/models/api_result.dart';
 import 'package:route_shuffle/core/utils/typedefs.dart';
@@ -16,8 +17,8 @@ class MapRepositoryImpl implements MapRepository {
     try {
       final coordinates = await _geolocationService.getCurrentLocation();
       return success(coordinates);
-    } on GeoFailure catch (e) {
-      return error(GeoFailure(message: e.message, error: e.error));
+    } on GeolocationException catch (e) {
+      return error(GeoFailure(message: e.message, error: e.failure));
     }
   }
 }
