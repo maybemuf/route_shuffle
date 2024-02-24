@@ -25,8 +25,8 @@ class GeolocationServiceImpl implements GeolocationService {
     final currentPosition = await Geolocator.getCurrentPosition();
 
     return Coordinates(
-      latitude: currentPosition.latitude,
-      longitude: currentPosition.longitude,
+      lat: currentPosition.latitude,
+      lng: currentPosition.longitude,
     );
   }
 
@@ -50,4 +50,3 @@ class GeolocationServiceImpl implements GeolocationService {
     }
   }
 }
-
