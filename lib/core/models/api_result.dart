@@ -11,3 +11,10 @@ sealed class ApiResult<T> with _$ApiResult<T> {
 
 Success<T> success<T>(T data) => Success(data);
 Error<T> error<T>(Failure failure) => Error(failure);
+
+extension ApiResultX<T> on ApiResult<T> {
+  bool get isSuccess => this is Success<T>;
+  bool get isError => this is Error<T>;
+  T get success => (this as Success<T>).data;
+  Failure get error => (this as Error<T>).failure;
+}
