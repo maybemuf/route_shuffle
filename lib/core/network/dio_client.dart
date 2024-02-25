@@ -1,20 +1,25 @@
 import 'package:dio/dio.dart';
-import 'package:route_shuffle/core/network/interceptors.dart';
+import 'package:route_shuffle/core/network/interceptors/api_key_interceptor.dart';
+import 'package:route_shuffle/core/network/interceptors/logger_interceptor.dart';
 import 'package:route_shuffle/core/utils/extensions.dart';
 
 class DioClient {
   late final Dio _dio;
 
-  DioClient({required String baseUrl, required String key})
-      : _dio = Dio(
+  DioClient({
+    required String baseUrl,
+    ApiKeyParams? apiKeyParams,
+  }) : _dio = Dio(
           BaseOptions(
             baseUrl: baseUrl,
-            queryParameters: {'key': key},
             connectTimeout: 3000.seconds,
             receiveTimeout: 5000.seconds,
             headers: {'Content-Type': 'application/json; charset=UTF-8'},
           ),
-        )..interceptors.addAll([LoggerInterceptor()]);
+        )..interceptors.addAll([
+            LoggerInterceptor(),
+            if (apiKeyParams != null) ApiKeyInterceptor(model: apiKeyParams),
+          ]);
 
   // GET METHOD
   Future<Response<dynamic>> get(
