@@ -26,6 +26,7 @@ void main() {
     mapService = MockMapService();
     mapRepositoryImpl = MapRepositoryImpl(
       geolocationService: geolocationService,
+      mapService: mapService,
     );
   });
 

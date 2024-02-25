@@ -8,7 +8,7 @@ part 'generated/geocoding_response.g.dart';
 @freezed
 class GeocodingResponse with _$GeocodingResponse {
   const factory GeocodingResponse({
-    required GeocodingResult results,
+    required List<GeocodingResult> results,
     required GeocodingStatus status,
   }) = _GeocodingResponse;
 
