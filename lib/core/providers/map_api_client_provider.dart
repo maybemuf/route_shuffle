@@ -12,5 +12,5 @@ DioClient mapApiClient(MapApiClientRef ref) => DioClient(
       apiKeyParams: ApiKeyParams(
         key: AppConfig.googleMapApiKey,
         keyName: ConstantStrings.apiKey,
-      )
+      ),
     );
