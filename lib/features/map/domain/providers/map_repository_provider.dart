@@ -8,6 +8,6 @@ part 'generated/map_repository_provider.g.dart';
 
 @riverpod
 MapRepository mapRepository(MapRepositoryRef ref) => MapRepositoryImpl(
-      mapService: ref.watch(mapServiceProvider),
-      geolocationService: ref.watch(geolocationServiceProvider),
+      mapService: ref.read(mapServiceProvider),
+      geolocationService: ref.read(geolocationServiceProvider),
     );
