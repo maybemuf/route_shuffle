@@ -1,27 +1,18 @@
 import 'package:geolocator/geolocator.dart';
-import 'package:route_shuffle/core/errors/enums.dart';
-import 'package:route_shuffle/core/errors/exceptions.dart';
 import 'package:route_shuffle/features/map/domain/entities/coordinates.dart';
+import 'package:route_shuffle/features/map/domain/entities/enums/location_permission_status.dart';
 
 abstract interface class GeolocationService {
   Future<Coordinates> getCurrentLocation();
+
+  Future<LocationPermissionStatus> checkPermission();
+
+  Future<void> requestPermission();
 }
 
 class GeolocationServiceImpl implements GeolocationService {
-
   @override
   Future<Coordinates> getCurrentLocation() async {
-    // Check if location services are enabled
-    if (!await Geolocator.isLocationServiceEnabled()) {
-      throw GeolocationException(
-        message: 'Location services are disabled',
-        failure: GeoFailureError.serviceDisabled,
-      );
-    }
-
-    // Check if location permissions are granted
-    await _checkPermission();
-
     final currentPosition = await Geolocator.getCurrentPosition();
 
     return Coordinates(
@@ -30,23 +21,29 @@ class GeolocationServiceImpl implements GeolocationService {
     );
   }
 
-  Future<void> _checkPermission() async {
-    var permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        throw GeolocationException(
-          message: 'Location permissions are denied',
-          failure: GeoFailureError.permissionDenied,
-        );
-      }
+  @override
+  Future<LocationPermissionStatus> checkPermission() async {
+    // Check if location service is enabled
+    if (!await Geolocator.isLocationServiceEnabled()) {
+      return LocationPermissionStatus.serviceDisabled;
     }
 
-    if (permission == LocationPermission.deniedForever) {
-      throw GeolocationException(
-        message: 'Location permissions are permanently denied',
-        failure: GeoFailureError.permissionDeniedForever,
-      );
-    }
+    final permission = await Geolocator.checkPermission();
+
+    return switch (permission) {
+      LocationPermission.unableToDetermine ||
+      LocationPermission.denied =>
+        LocationPermissionStatus.denied,
+      LocationPermission.deniedForever =>
+        LocationPermissionStatus.deniedForever,
+      LocationPermission.whileInUse ||
+      LocationPermission.always =>
+        LocationPermissionStatus.granted,
+    };
+  }
+
+  @override
+  Future<void> requestPermission() {
+    return Geolocator.requestPermission();
   }
 }
