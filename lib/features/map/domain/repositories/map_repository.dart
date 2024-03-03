@@ -5,5 +5,7 @@ import 'package:route_shuffle/features/map/domain/entities/geocoding_response.da
 abstract interface class MapRepository {
   FutureResult<Coordinates> getCurrentLocation();
 
+  FutureResult<Stream<Coordinates>> watchCurrentLocation();
+
   FutureResult<GeocodingResponse> reverseGeocode(Coordinates coordinates);
 }

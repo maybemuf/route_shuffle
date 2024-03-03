@@ -8,6 +8,7 @@ class Coordinates with _$Coordinates {
   const factory Coordinates({
     required double lat,
     required double lng,
+    @Default(0.0) double heading,
   }) = _Coordinates;
 
   factory Coordinates.fromJson(Map<String, dynamic> json) =>

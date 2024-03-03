@@ -39,4 +39,14 @@ class MapRepositoryImpl implements MapRepository {
       return error(ApiFailure(message: e.message, statusCode: e.statusCode));
     }
   }
+
+  @override
+  FutureResult<Stream<Coordinates>> watchCurrentLocation() async {
+    try {
+      final stream = await _geolocationService.watchCurrentLocation();
+      return success(stream);
+    } on GeolocationException catch (e) {
+      return error(GeoFailure(message: e.message, error: e.failure));
+    }
+  }
 }
