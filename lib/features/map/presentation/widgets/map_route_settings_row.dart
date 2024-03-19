@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:route_shuffle/features/map/domain/entities/enums/route_type.dart';
-import 'package:route_shuffle/features/map/presentation/widgets/map_action_button.dart';
+import 'package:route_shuffle/features/map/presentation/providers/distance_focus_node_provider.dart';
+import 'package:route_shuffle/features/map/presentation/providers/unit_system_provider.dart';
 import 'package:route_shuffle/features/map/presentation/widgets/map_radio_button.dart';
+import 'package:route_shuffle/features/map/presentation/widgets/map_text_field.dart';
 
-class MapRouteSettingsRow extends HookWidget {
+class MapRouteSettingsRow extends HookConsumerWidget {
   const MapRouteSettingsRow({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
     final routeType = useState<RouteType>(RouteType.walk);
+    final controller = useTextEditingController(text: '3km');
+    final distanceFocusNode = ref.watch(distanceFocusNodeProvider);
+    final unitSystem = ref.watch(unitSystemProvider);
 
     return Row(
       children: [
@@ -33,24 +39,12 @@ class MapRouteSettingsRow extends HookWidget {
                     Expanded(
                       child: LayoutBuilder(
                         builder: (context, constraints) {
-                          print(
-                              'constraints.maxWidth: ${constraints.maxWidth}');
-                          return MapActionButton(
-                            height: constraints.maxHeight,
-                            width: constraints.maxWidth,
-                            onPressed: () {},
-                            child: Text(
-                              '3 km',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                            ),
+                          return MapTextField(
+                            focusNode: distanceFocusNode,
+                            controller: controller,
+                            textAlign: TextAlign.center,
+                            isDistance: true,
+                            unitSystemType: unitSystem,
                           );
                         },
                       ),

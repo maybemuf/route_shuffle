@@ -15,20 +15,7 @@ class MapActionBlock extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: 20,
-          child: Center(
-            child: Container(
-              height: 5,
-              width: 50,
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(5),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 20),
         const MapLocationRow(),
         const SizedBox(height: 20),
         const MapRouteSettingsRow(),

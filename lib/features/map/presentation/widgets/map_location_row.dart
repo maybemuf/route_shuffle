@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:route_shuffle/features/map/presentation/providers/location_focus_node_provider.dart';
 import 'package:route_shuffle/features/map/presentation/widgets/map_action_button.dart';
+import 'package:route_shuffle/features/map/presentation/widgets/map_text_field.dart';
 
-class MapLocationRow extends StatelessWidget {
+class MapLocationRow extends HookConsumerWidget {
   const MapLocationRow({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locationFocusNode = ref.read(locationFocusNodeProvider);
+    final controller = useTextEditingController(text: 'Current Location');
     final textTheme = Theme.of(context).textTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,30 +29,10 @@ class MapLocationRow extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return MapActionButton(
-                      height: constraints.maxHeight,
-                      width: constraints.maxWidth,
-                      onPressed: () {},
-                      child: SizedBox(
-                        width: constraints.maxWidth - 24,
-                        child: Text(
-                          'Starting Location',
-                          textAlign: TextAlign.left,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                            color: Colors.black54,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
+                child: MapTextField(
+                  hintText: 'Starting Location',
+                  focusNode: locationFocusNode,
+                  controller: controller,
                 ),
               ),
               const SizedBox(width: 10),
