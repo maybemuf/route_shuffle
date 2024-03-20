@@ -15,9 +15,15 @@ abstract interface class MapService {
 
   Future<List<GeocodingResult>> geocode(String address);
 
-  Future<List<PlacePrediction>> autocompletePlaces(String input);
+  Future<List<PlacePrediction>> autocompletePlaces({
+    required String input,
+    required String sessionToken,
+  });
 
-  Future<Place> getPlaceDetails(String placeId);
+  Future<Place> getPlaceDetails({
+    required String placeId,
+    required String sessionToken,
+  });
 }
 
 class MapServiceImpl implements MapService {
@@ -49,7 +55,6 @@ class MapServiceImpl implements MapService {
       }
 
       return geocodingResponse.results;
-
     } on DioException catch (e) {
       throw MapApiException(
         message: e.message ?? 'Something went wrong',
@@ -65,7 +70,10 @@ class MapServiceImpl implements MapService {
   }
 
   @override
-  Future<List<PlacePrediction>> autocompletePlaces(String input) async {
+  Future<List<PlacePrediction>> autocompletePlaces({
+    required String input,
+    required String sessionToken,
+  }) async {
     try {
       final response = await mapDioClient.get(
         '/place/autocomplete/json',
@@ -88,7 +96,6 @@ class MapServiceImpl implements MapService {
       }
 
       return autoCompleteResponse.predictions;
-
     } on DioException catch (e) {
       throw MapApiException(
         message: e.message ?? 'Something went wrong',
@@ -99,7 +106,10 @@ class MapServiceImpl implements MapService {
   }
 
   @override
-  Future<Place> getPlaceDetails(String placeId) async {
+  Future<Place> getPlaceDetails({
+    required String placeId,
+    required String sessionToken,
+  }) async {
     try {
       final response = await mapDioClient.get(
         '/place/details/json',
@@ -122,7 +132,6 @@ class MapServiceImpl implements MapService {
       }
 
       return placeResponse.result;
-
     } on DioException catch (e) {
       throw MapApiException(
         message: e.message ?? 'Something went wrong',

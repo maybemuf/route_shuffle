@@ -9,27 +9,36 @@ import 'package:route_shuffle/features/map/data/models/enums/map_api_response_st
 import 'package:route_shuffle/features/map/data/repositories/map_repository_impl.dart';
 import 'package:route_shuffle/features/map/data/services/geolocation_service.dart';
 import 'package:route_shuffle/features/map/data/services/map_service.dart';
+import 'package:route_shuffle/features/map/data/services/map_session_service.dart';
 import 'package:route_shuffle/features/map/domain/entities/coordinates.dart';
 import 'package:route_shuffle/features/map/domain/entities/geocoding_result.dart';
 import 'package:route_shuffle/features/map/domain/entities/geolocation_geometry.dart';
 import 'package:route_shuffle/features/map/domain/entities/place.dart';
 import 'package:route_shuffle/features/map/domain/entities/place_prediction.dart';
+import 'package:route_shuffle/features/map/domain/providers/map_session_service_provider.dart';
 import 'package:route_shuffle/features/map/domain/repositories/map_repository.dart';
 
-@GenerateNiceMocks([MockSpec<GeolocationService>(), MockSpec<MapService>()])
+@GenerateNiceMocks([
+  MockSpec<GeolocationService>(),
+  MockSpec<MapService>(),
+  MockSpec<MapSessionService>(),
+])
 import 'map_repository_impl_test.mocks.dart';
 
 void main() {
   late GeolocationService geolocationService;
   late MapService mapService;
   late MapRepository mapRepositoryImpl;
+  late MapSessionService mapSessionService;
 
   setUp(() {
     geolocationService = MockGeolocationService();
     mapService = MockMapService();
+    mapSessionService = MockMapSessionService();
     mapRepositoryImpl = MapRepositoryImpl(
       geolocationService: geolocationService,
       mapService: mapService,
+      mapSessionService: mapSessionService,
     );
   });
 
@@ -153,11 +162,15 @@ void main() {
 
   group('places autocomplete', () {
     const tInput = 'input';
-    test('should succeed with [List<Place> on success', () async {
+    const tToken = 'token';
+    test('should succeed with [List<Place>] on success', () async {
       const tPlaces = <PlacePrediction>[];
-      when(mapService.autocompletePlaces(tInput)).thenAnswer(
-        (_) async => tPlaces,
-      );
+      when(
+        mapService.autocompletePlaces(
+          input: tInput,
+          sessionToken: tToken,
+        ),
+      ).thenAnswer((_) async => tPlaces);
 
       //act
       final result = await mapRepositoryImpl.autocompletePlaces(tInput);
@@ -179,11 +192,17 @@ void main() {
         statusCode: tException.statusCode,
         status: tException.status,
       );
-      when(mapService.autocompletePlaces(tInput)).thenThrow(tException);
+      when(mapSessionService.getSessionToken()).thenAnswer((_) async => tToken);
+      when(
+        mapService.autocompletePlaces(
+          input: tInput,
+          sessionToken: tToken,
+        ),
+      ).thenThrow(tException);
 
       //act
       final result = await mapRepositoryImpl.autocompletePlaces(tInput);
-
+      print(result);
       //assert
       expect(result.isError, equals(true));
       expect(result.error, equals(tFailure));
@@ -192,14 +211,20 @@ void main() {
 
   group('place details', () {
     const tPlaceId = 'placeId';
+    const tToken = 'token';
     test('should succeed with [Place] on success', () async {
       const tPlace = Place(
         formattedAddress: 'formattedAddress',
         geometry: GeolocationGeometry(location: Coordinates(lat: 0, lng: 0)),
       );
-      when(mapService.getPlaceDetails(tPlaceId)).thenAnswer(
-        (_) async => tPlace,
-      );
+      when(mapSessionService.invalidateSessionToken()).thenAnswer((_) async {});
+      when(mapSessionService.getSessionToken()).thenAnswer((_) async => tToken);
+      when(
+        mapService.getPlaceDetails(
+          placeId: tPlaceId,
+          sessionToken: tToken,
+        ),
+      ).thenAnswer((_) async => tPlace);
 
       //act
       final result = await mapRepositoryImpl.getPlaceDetails(tPlaceId);
@@ -221,7 +246,14 @@ void main() {
         statusCode: tException.statusCode,
         status: tException.status,
       );
-      when(mapService.getPlaceDetails(tPlaceId)).thenThrow(tException);
+      when(mapSessionService.invalidateSessionToken()).thenAnswer((_) async {});
+      when(mapSessionService.getSessionToken()).thenAnswer((_) async => tToken);
+      when(
+        mapService.getPlaceDetails(
+          placeId: tPlaceId,
+          sessionToken: tToken,
+        ),
+      ).thenThrow(tException);
 
       //act
       final result = await mapRepositoryImpl.getPlaceDetails(tPlaceId);

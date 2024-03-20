@@ -4,6 +4,7 @@ import 'package:route_shuffle/core/models/api_result.dart';
 import 'package:route_shuffle/core/utils/typedefs.dart';
 import 'package:route_shuffle/features/map/data/services/geolocation_service.dart';
 import 'package:route_shuffle/features/map/data/services/map_service.dart';
+import 'package:route_shuffle/features/map/data/services/map_session_service.dart';
 import 'package:route_shuffle/features/map/domain/entities/coordinates.dart';
 import 'package:route_shuffle/features/map/domain/entities/geocoding_result.dart';
 import 'package:route_shuffle/features/map/domain/entities/place.dart';
@@ -13,11 +14,14 @@ import 'package:route_shuffle/features/map/domain/repositories/map_repository.da
 class MapRepositoryImpl implements MapRepository {
   final GeolocationService _geolocationService;
   final MapService _mapService;
+  final MapSessionService _mapSessionService;
 
   MapRepositoryImpl({
     required GeolocationService geolocationService,
     required MapService mapService,
+    required MapSessionService mapSessionService,
   })  : _mapService = mapService,
+        _mapSessionService = mapSessionService,
         _geolocationService = geolocationService;
 
   @override
@@ -61,7 +65,11 @@ class MapRepositoryImpl implements MapRepository {
   @override
   FutureResult<List<PlacePrediction>> autocompletePlaces(String input) async {
     try {
-      final places = await _mapService.autocompletePlaces(input);
+      final token = await _mapSessionService.getSessionToken();
+      final places = await _mapService.autocompletePlaces(
+        input: input,
+        sessionToken: token,
+      );
       return success(places);
     } on MapApiException catch (e) {
       return error(
@@ -77,7 +85,13 @@ class MapRepositoryImpl implements MapRepository {
   @override
   FutureResult<Place> getPlaceDetails(String placeId) async {
     try {
-      final place = await _mapService.getPlaceDetails(placeId);
+      final token = await _mapSessionService.getSessionToken();
+      final place = await _mapService.getPlaceDetails(
+        placeId: placeId,
+        sessionToken: token,
+      );
+      await _mapSessionService.invalidateSessionToken();
+
       return success(place);
     } on MapApiException catch (e) {
       return error(
