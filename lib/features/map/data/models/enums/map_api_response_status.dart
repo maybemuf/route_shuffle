@@ -5,6 +5,8 @@ enum MapApiResponseStatus {
   ok,
   @JsonValue('ZERO_RESULTS')
   zeroResults,
+  @JsonValue('NOT_FOUND')
+  notFound,
   @JsonValue('OVER_QUERY_LIMIT')
   overQueryLimit,
   @JsonValue('REQUEST_DENIED')

@@ -4,6 +4,7 @@ import 'package:route_shuffle/core/network/dio_client.dart';
 import 'package:route_shuffle/features/map/data/models/autocomplete_response.dart';
 import 'package:route_shuffle/features/map/data/models/enums/map_api_response_status.dart';
 import 'package:route_shuffle/features/map/data/models/geocoding_response.dart';
+import 'package:route_shuffle/features/map/data/models/place_response.dart';
 import 'package:route_shuffle/features/map/domain/entities/coordinates.dart';
 import 'package:route_shuffle/features/map/domain/entities/geocoding_result.dart';
 import 'package:route_shuffle/features/map/domain/entities/place.dart';
@@ -41,7 +42,7 @@ class MapServiceImpl implements MapService {
 
       if (geocodingResponse.status.isError) {
         throw MapApiException(
-          message: geocodingResponse.status.toString(),
+          message: geocodingResponse.status.name,
           statusCode: 500,
           status: geocodingResponse.status,
         );
@@ -80,7 +81,7 @@ class MapServiceImpl implements MapService {
 
       if (autoCompleteResponse.status.isError) {
         throw MapApiException(
-          message: autoCompleteResponse.status.toString(),
+          message: autoCompleteResponse.status.name,
           statusCode: 500,
           status: autoCompleteResponse.status,
         );
@@ -98,8 +99,36 @@ class MapServiceImpl implements MapService {
   }
 
   @override
-  Future<Place> getPlaceDetails(String placeId) {
-    // TODO: implement getPlaceDetails
-    throw UnimplementedError();
+  Future<Place> getPlaceDetails(String placeId) async {
+    try {
+      final response = await mapDioClient.get(
+        '/place/details/json',
+        queryParameters: {
+          'place_id': placeId,
+          'fields': 'formatted_address,geometry',
+        },
+      );
+
+      final placeResponse = PlaceResponse.fromJson(
+        response.data as Map<String, dynamic>,
+      );
+
+      if (placeResponse.status.isError) {
+        throw MapApiException(
+          message: placeResponse.status.name,
+          statusCode: 500,
+          status: placeResponse.status,
+        );
+      }
+
+      return placeResponse.result;
+
+    } on DioException catch (e) {
+      throw MapApiException(
+        message: e.message ?? 'Something went wrong',
+        statusCode: e.response?.statusCode ?? 500,
+        status: MapApiResponseStatus.unknownError,
+      );
+    }
   }
 }
