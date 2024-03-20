@@ -2,11 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:route_shuffle/features/map/presentation/notifiers/map_notifier.dart';
-import 'package:route_shuffle/features/map/presentation/widgets/map_action_block.dart';
 import 'package:route_shuffle/features/map/presentation/widgets/map_bottom_sheet.dart';
 
 class MapScreen extends HookConsumerWidget {
@@ -68,9 +66,7 @@ class MapScreen extends HookConsumerWidget {
                   ],
                 ),
               ),
-              //TODO: remove this temporary space
               const SizedBox(height: 300),
-              // ProviderScope(child: const IgnorePointer(child: MapActionBlock())),
             ],
           ),
           const MapBottomSheet(),

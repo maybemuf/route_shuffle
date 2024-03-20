@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:route_shuffle/features/map/presentation/notifiers/map_notifier.dart';
 import 'package:route_shuffle/features/map/presentation/widgets/map_action_button.dart';
 import 'package:route_shuffle/features/map/presentation/widgets/map_location_row.dart';
 import 'package:route_shuffle/features/map/presentation/widgets/map_route_settings_row.dart';
@@ -10,7 +9,6 @@ class MapActionBlock extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mapState = ref.watch(mapNotifierProvider);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -15,7 +15,7 @@ class MapBottomSheet extends HookConsumerWidget {
         MediaQuery.sizeOf(context).height - MediaQuery.paddingOf(context).top;
     final key = useMemoized(GlobalKey.new);
     final isExpanded = useState(false);
-    final height = useState(0.0);
+    final height = useState(.1);
 
     ref.listen(isBottomSheetExpandedProvider, (previous, next) {
       final blockHeight = key.currentContext?.size?.height ?? 0;
@@ -96,7 +96,7 @@ class MapBottomSheet extends HookConsumerWidget {
                                 onPressed:
                                     ref.read(distanceFocusNodeProvider).unfocus,
                                 child: const Text('Save'),
-                              )
+                              ),
                             ],
                           ),
                         ),

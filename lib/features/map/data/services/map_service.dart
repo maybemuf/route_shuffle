@@ -3,8 +3,8 @@ import 'package:route_shuffle/core/errors/exceptions.dart';
 import 'package:route_shuffle/core/network/dio_client.dart';
 import 'package:route_shuffle/features/map/data/models/autocomplete_response.dart';
 import 'package:route_shuffle/features/map/data/models/enums/map_api_response_status.dart';
-import 'package:route_shuffle/features/map/domain/entities/coordinates.dart';
 import 'package:route_shuffle/features/map/data/models/geocoding_response.dart';
+import 'package:route_shuffle/features/map/domain/entities/coordinates.dart';
 import 'package:route_shuffle/features/map/domain/entities/geocoding_result.dart';
 import 'package:route_shuffle/features/map/domain/entities/place_prediction.dart';
 
