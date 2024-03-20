@@ -32,8 +32,10 @@ class LocationPermissionScreen extends ConsumerWidget {
                 const SizedBox(height: 24),
                 Text(
                   status == LocationPermissionStatus.denied
-                      ? 'You have denied location permission. Please enable it in the settings.'
-                      : 'You have denied location permission forever. Please enable it in the settings.',
+                      ? 'You have denied location permission. Please enable it '
+                      'in the settings.'
+                      : 'You have denied location permission forever. Please '
+                      'enable it in the settings.',
                   style: Theme.of(context).textTheme.bodyLarge,
                   textAlign: TextAlign.center,
                 ),

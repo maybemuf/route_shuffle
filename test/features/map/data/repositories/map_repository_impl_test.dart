@@ -15,7 +15,6 @@ import 'package:route_shuffle/features/map/domain/entities/geocoding_result.dart
 import 'package:route_shuffle/features/map/domain/entities/geolocation_geometry.dart';
 import 'package:route_shuffle/features/map/domain/entities/place.dart';
 import 'package:route_shuffle/features/map/domain/entities/place_prediction.dart';
-import 'package:route_shuffle/features/map/domain/providers/map_session_service_provider.dart';
 import 'package:route_shuffle/features/map/domain/repositories/map_repository.dart';
 
 @GenerateNiceMocks([
@@ -202,7 +201,7 @@ void main() {
 
       //act
       final result = await mapRepositoryImpl.autocompletePlaces(tInput);
-      print(result);
+
       //assert
       expect(result.isError, equals(true));
       expect(result.error, equals(tFailure));
