@@ -6,6 +6,7 @@ import 'package:route_shuffle/features/map/data/services/geolocation_service.dar
 import 'package:route_shuffle/features/map/data/services/map_service.dart';
 import 'package:route_shuffle/features/map/domain/entities/coordinates.dart';
 import 'package:route_shuffle/features/map/domain/entities/geocoding_response.dart';
+import 'package:route_shuffle/features/map/domain/entities/place.dart';
 import 'package:route_shuffle/features/map/domain/repositories/map_repository.dart';
 
 class MapRepositoryImpl implements MapRepository {
@@ -47,6 +48,16 @@ class MapRepositoryImpl implements MapRepository {
       return success(stream);
     } on GeolocationException catch (e) {
       return error(GeoFailure(message: e.message, error: e.failure));
+    }
+  }
+
+  @override
+  FutureResult<List<Place>> autocompletePlaces(String input) async {
+    try {
+      final places = await _mapService.autocompletePlaces(input);
+      return success(places);
+    } on ApiException catch (e) {
+      return error(ApiFailure(message: e.message, statusCode: e.statusCode));
     }
   }
 }

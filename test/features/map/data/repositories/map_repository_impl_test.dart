@@ -11,6 +11,7 @@ import 'package:route_shuffle/features/map/data/services/map_service.dart';
 import 'package:route_shuffle/features/map/domain/entities/coordinates.dart';
 import 'package:route_shuffle/features/map/domain/entities/enums/geocoding_status.dart';
 import 'package:route_shuffle/features/map/domain/entities/geocoding_response.dart';
+import 'package:route_shuffle/features/map/domain/entities/place.dart';
 import 'package:route_shuffle/features/map/domain/repositories/map_repository.dart';
 
 @GenerateNiceMocks([MockSpec<GeolocationService>(), MockSpec<MapService>()])
@@ -146,7 +147,43 @@ void main() {
         expect(result.isError, equals(true));
         expect(result.error, equals(tFailure));
       });
+    });
+  });
 
+  group('places autocomplete', () {
+    const tInput = 'input';
+    test('should succeed with [List<Place> on success', () async {
+      const tPlaces = <Place>[];
+      when(mapService.autocompletePlaces(tInput)).thenAnswer(
+        (_) async => tPlaces,
+      );
+
+      //act
+      final result = await mapRepositoryImpl.autocompletePlaces(tInput);
+
+      //assert
+      expect(result.isSuccess, equals(true));
+      expect(result.success, equals(tPlaces));
+    });
+
+    test('should throw [ApiFailure] on [ApiException]', () async {
+      //arrange
+      final tException = ApiException(
+        message: 'Api error',
+        statusCode: 404,
+      );
+      final tFailure = ApiFailure(
+        message: tException.message,
+        statusCode: tException.statusCode,
+      );
+      when(mapService.autocompletePlaces(tInput)).thenThrow(tException);
+
+      //act
+      final result = await mapRepositoryImpl.autocompletePlaces(tInput);
+
+      //assert
+      expect(result.isError, equals(true));
+      expect(result.error, equals(tFailure));
     });
   });
 }

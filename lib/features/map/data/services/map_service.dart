@@ -3,11 +3,14 @@ import 'package:route_shuffle/core/errors/exceptions.dart';
 import 'package:route_shuffle/core/network/dio_client.dart';
 import 'package:route_shuffle/features/map/domain/entities/coordinates.dart';
 import 'package:route_shuffle/features/map/domain/entities/geocoding_response.dart';
+import 'package:route_shuffle/features/map/domain/entities/place.dart';
 
 abstract interface class MapService {
   Future<GeocodingResponse> reverseGeocode(Coordinates coordinates);
 
   Future<GeocodingResponse> geocode(String address);
+
+  Future<List<Place>> autocompletePlaces(String input);
 }
 
 class MapServiceImpl implements MapService {
@@ -37,6 +40,11 @@ class MapServiceImpl implements MapService {
 
   @override
   Future<GeocodingResponse> geocode(String address) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Place>> autocompletePlaces(String input) {
     throw UnimplementedError();
   }
 }
