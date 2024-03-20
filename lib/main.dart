@@ -13,7 +13,7 @@ Future<void> main() async {
 
   runApp(
     ProviderScope(
-      observers: [ProviderLogger()],
+      // observers: [ProviderLogger()],
       child: EasyLocalization(
         supportedLocales: const [_englishLocale],
         path: ConstantStrings.translationsPath,
