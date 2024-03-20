@@ -6,6 +6,7 @@ import 'package:route_shuffle/features/map/data/models/enums/map_api_response_st
 import 'package:route_shuffle/features/map/data/models/geocoding_response.dart';
 import 'package:route_shuffle/features/map/domain/entities/coordinates.dart';
 import 'package:route_shuffle/features/map/domain/entities/geocoding_result.dart';
+import 'package:route_shuffle/features/map/domain/entities/place.dart';
 import 'package:route_shuffle/features/map/domain/entities/place_prediction.dart';
 
 abstract interface class MapService {
@@ -14,6 +15,8 @@ abstract interface class MapService {
   Future<List<GeocodingResult>> geocode(String address);
 
   Future<List<PlacePrediction>> autocompletePlaces(String input);
+
+  Future<Place> getPlaceDetails(String placeId);
 }
 
 class MapServiceImpl implements MapService {
@@ -92,5 +95,11 @@ class MapServiceImpl implements MapService {
         status: MapApiResponseStatus.unknownError,
       );
     }
+  }
+
+  @override
+  Future<Place> getPlaceDetails(String placeId) {
+    // TODO: implement getPlaceDetails
+    throw UnimplementedError();
   }
 }

@@ -6,6 +6,7 @@ import 'package:route_shuffle/features/map/data/services/geolocation_service.dar
 import 'package:route_shuffle/features/map/data/services/map_service.dart';
 import 'package:route_shuffle/features/map/domain/entities/coordinates.dart';
 import 'package:route_shuffle/features/map/domain/entities/geocoding_result.dart';
+import 'package:route_shuffle/features/map/domain/entities/place.dart';
 import 'package:route_shuffle/features/map/domain/entities/place_prediction.dart';
 import 'package:route_shuffle/features/map/domain/repositories/map_repository.dart';
 
@@ -37,7 +38,13 @@ class MapRepositoryImpl implements MapRepository {
       final data = await _mapService.reverseGeocode(coordinates);
       return success(data);
     } on MapApiException catch (e) {
-      return error(ApiFailure(message: e.message, statusCode: e.statusCode));
+      return error(
+        MapApiFailure(
+          message: e.message,
+          statusCode: e.statusCode,
+          status: e.status,
+        ),
+      );
     }
   }
 
@@ -57,7 +64,29 @@ class MapRepositoryImpl implements MapRepository {
       final places = await _mapService.autocompletePlaces(input);
       return success(places);
     } on MapApiException catch (e) {
-      return error(ApiFailure(message: e.message, statusCode: e.statusCode));
+      return error(
+        MapApiFailure(
+          message: e.message,
+          statusCode: e.statusCode,
+          status: e.status,
+        ),
+      );
+    }
+  }
+
+  @override
+  FutureResult<Place> getPlaceDetails(String placeId) async {
+    try {
+      final place = await _mapService.getPlaceDetails(placeId);
+      return success(place);
+    } on MapApiException catch (e) {
+      return error(
+        MapApiFailure(
+          message: e.message,
+          statusCode: e.statusCode,
+          status: e.status,
+        ),
+      );
     }
   }
 }

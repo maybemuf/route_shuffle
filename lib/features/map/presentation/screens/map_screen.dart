@@ -66,7 +66,7 @@ class MapScreen extends HookConsumerWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 300),
+              // const SizedBox(height: 300),
             ],
           ),
           const MapBottomSheet(),

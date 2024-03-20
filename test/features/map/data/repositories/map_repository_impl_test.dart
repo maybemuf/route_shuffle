@@ -11,6 +11,8 @@ import 'package:route_shuffle/features/map/data/services/geolocation_service.dar
 import 'package:route_shuffle/features/map/data/services/map_service.dart';
 import 'package:route_shuffle/features/map/domain/entities/coordinates.dart';
 import 'package:route_shuffle/features/map/domain/entities/geocoding_result.dart';
+import 'package:route_shuffle/features/map/domain/entities/geolocation_geometry.dart';
+import 'package:route_shuffle/features/map/domain/entities/place.dart';
 import 'package:route_shuffle/features/map/domain/entities/place_prediction.dart';
 import 'package:route_shuffle/features/map/domain/repositories/map_repository.dart';
 
@@ -131,9 +133,10 @@ void main() {
           statusCode: 404,
           status: MapApiResponseStatus.unknownError,
         );
-        final tFailure = ApiFailure(
+        final tFailure = MapApiFailure(
           message: tException.message,
           statusCode: tException.statusCode,
+          status: tException.status,
         );
         const tCoords = Coordinates(lat: 0, lng: 0);
         when(mapService.reverseGeocode(tCoords)).thenThrow(tException);
@@ -171,14 +174,57 @@ void main() {
         statusCode: 404,
         status: MapApiResponseStatus.unknownError,
       );
-      final tFailure = ApiFailure(
+      final tFailure = MapApiFailure(
         message: tException.message,
         statusCode: tException.statusCode,
+        status: tException.status,
       );
       when(mapService.autocompletePlaces(tInput)).thenThrow(tException);
 
       //act
       final result = await mapRepositoryImpl.autocompletePlaces(tInput);
+
+      //assert
+      expect(result.isError, equals(true));
+      expect(result.error, equals(tFailure));
+    });
+  });
+
+  group('place details', () {
+    const tPlaceId = 'placeId';
+    test('should succeed with [Place] on success', () async {
+      const tPlace = Place(
+        formattedAddress: 'formattedAddress',
+        geometry: GeolocationGeometry(location: Coordinates(lat: 0, lng: 0)),
+      );
+      when(mapService.getPlaceDetails(tPlaceId)).thenAnswer(
+        (_) async => tPlace,
+      );
+
+      //act
+      final result = await mapRepositoryImpl.getPlaceDetails(tPlaceId);
+
+      //assert
+      expect(result.isSuccess, equals(true));
+      expect(result.success, equals(tPlace));
+    });
+
+    test('should throw [ApiFailure] on [ApiException]', () async {
+      //arrange
+      final tException = MapApiException(
+        message: 'Api error',
+        statusCode: 404,
+        status: MapApiResponseStatus.unknownError,
+      );
+      final tFailure = MapApiFailure(
+        message: tException.message,
+        statusCode: tException.statusCode,
+        status: tException.status,
+      );
+      when(mapService.getPlaceDetails(tPlaceId)).thenThrow(tException);
+
+      //act
+      final result = await mapRepositoryImpl.getPlaceDetails(tPlaceId);
 
       //assert
       expect(result.isError, equals(true));
