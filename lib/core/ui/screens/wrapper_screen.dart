@@ -44,21 +44,7 @@ class _WrapperScreenState extends ConsumerState<WrapperScreen>
   @override
   Widget build(BuildContext context) {
     final appInit = ref.watch(appInitProvider);
-    ref.listen(geolocationStatusProvider, (previous, next) {
-      print('previous: $previous, next: $next');
-      if (previous != next) {
-        next.maybeWhen<void>(
-          data: (status) {
-            context.goNamed(
-              status == LocationPermissionStatus.granted
-                  ? AppRoutes.map.named
-                  : AppRoutes.locationPermission.named,
-            );
-          },
-          orElse: () {},
-        );
-      }
-    });
+    _setupListeners();
     return appInit.when(
       data: (_) => widget.child,
       error: (error, stackTrace) => ErrorScreen(
@@ -67,5 +53,19 @@ class _WrapperScreenState extends ConsumerState<WrapperScreen>
       ),
       loading: SplashScreen.new,
     );
+  }
+
+  void _setupListeners() {
+    ref.listen(geolocationStatusProvider, (previous, next) {
+      if (previous != next) {
+        next.whenData(
+          (status) => context.goNamed(
+            status == LocationPermissionStatus.granted
+                ? AppRoutes.map.named
+                : AppRoutes.locationPermission.named,
+          ),
+        );
+      }
+    });
   }
 }
