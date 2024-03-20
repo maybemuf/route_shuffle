@@ -5,13 +5,13 @@ import 'package:route_shuffle/core/errors/enums.dart';
 import 'package:route_shuffle/core/errors/exceptions.dart';
 import 'package:route_shuffle/core/errors/failure.dart';
 import 'package:route_shuffle/core/models/api_result.dart';
+import 'package:route_shuffle/features/map/data/models/enums/map_api_response_status.dart';
 import 'package:route_shuffle/features/map/data/repositories/map_repository_impl.dart';
 import 'package:route_shuffle/features/map/data/services/geolocation_service.dart';
 import 'package:route_shuffle/features/map/data/services/map_service.dart';
 import 'package:route_shuffle/features/map/domain/entities/coordinates.dart';
-import 'package:route_shuffle/features/map/domain/entities/enums/geocoding_status.dart';
-import 'package:route_shuffle/features/map/domain/entities/geocoding_response.dart';
-import 'package:route_shuffle/features/map/domain/entities/place.dart';
+import 'package:route_shuffle/features/map/domain/entities/geocoding_result.dart';
+import 'package:route_shuffle/features/map/domain/entities/place_prediction.dart';
 import 'package:route_shuffle/features/map/domain/repositories/map_repository.dart';
 
 @GenerateNiceMocks([MockSpec<GeolocationService>(), MockSpec<MapService>()])
@@ -112,26 +112,24 @@ void main() {
       test('should return geocoding response on success', () async {
         //arrange
         const tCoords = Coordinates(lat: 0, lng: 0);
-        const tResponse = GeocodingResponse(
-          results: [],
-          status: GeocodingStatus.ok,
-        );
+        const tResults = <GeocodingResult>[];
         when(mapService.reverseGeocode(tCoords))
-            .thenAnswer((_) async => tResponse);
+            .thenAnswer((_) async => tResults);
 
         //act
         final result = await mapRepositoryImpl.reverseGeocode(tCoords);
 
         //assert
         expect(result.isSuccess, equals(true));
-        expect(result.success, equals(tResponse));
+        expect(result.success, equals(tResults));
       });
 
       test('should throw [ApiFailure] on [ApiException]', () async {
         //arrange
-        final tException = ApiException(
+        final tException = MapApiException(
           message: 'Api error',
           statusCode: 404,
+          status: MapApiResponseStatus.unknownError,
         );
         final tFailure = ApiFailure(
           message: tException.message,
@@ -153,7 +151,7 @@ void main() {
   group('places autocomplete', () {
     const tInput = 'input';
     test('should succeed with [List<Place> on success', () async {
-      const tPlaces = <Place>[];
+      const tPlaces = <PlacePrediction>[];
       when(mapService.autocompletePlaces(tInput)).thenAnswer(
         (_) async => tPlaces,
       );
@@ -168,9 +166,10 @@ void main() {
 
     test('should throw [ApiFailure] on [ApiException]', () async {
       //arrange
-      final tException = ApiException(
+      final tException = MapApiException(
         message: 'Api error',
         statusCode: 404,
+        status: MapApiResponseStatus.unknownError,
       );
       final tFailure = ApiFailure(
         message: tException.message,

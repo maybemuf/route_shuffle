@@ -5,8 +5,8 @@ import 'package:route_shuffle/core/utils/typedefs.dart';
 import 'package:route_shuffle/features/map/data/services/geolocation_service.dart';
 import 'package:route_shuffle/features/map/data/services/map_service.dart';
 import 'package:route_shuffle/features/map/domain/entities/coordinates.dart';
-import 'package:route_shuffle/features/map/domain/entities/geocoding_response.dart';
-import 'package:route_shuffle/features/map/domain/entities/place.dart';
+import 'package:route_shuffle/features/map/domain/entities/geocoding_result.dart';
+import 'package:route_shuffle/features/map/domain/entities/place_prediction.dart';
 import 'package:route_shuffle/features/map/domain/repositories/map_repository.dart';
 
 class MapRepositoryImpl implements MapRepository {
@@ -30,13 +30,13 @@ class MapRepositoryImpl implements MapRepository {
   }
 
   @override
-  FutureResult<GeocodingResponse> reverseGeocode(
+  FutureResult<List<GeocodingResult>> reverseGeocode(
     Coordinates coordinates,
   ) async {
     try {
       final data = await _mapService.reverseGeocode(coordinates);
       return success(data);
-    } on ApiException catch (e) {
+    } on MapApiException catch (e) {
       return error(ApiFailure(message: e.message, statusCode: e.statusCode));
     }
   }
@@ -52,11 +52,11 @@ class MapRepositoryImpl implements MapRepository {
   }
 
   @override
-  FutureResult<List<Place>> autocompletePlaces(String input) async {
+  FutureResult<List<PlacePrediction>> autocompletePlaces(String input) async {
     try {
       final places = await _mapService.autocompletePlaces(input);
       return success(places);
-    } on ApiException catch (e) {
+    } on MapApiException catch (e) {
       return error(ApiFailure(message: e.message, statusCode: e.statusCode));
     }
   }

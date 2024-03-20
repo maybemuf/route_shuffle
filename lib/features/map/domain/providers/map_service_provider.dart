@@ -6,4 +6,4 @@ part 'generated/map_service_provider.g.dart';
 
 @riverpod
 MapService mapService(MapServiceRef ref) =>
-    MapServiceImpl(dioClient: ref.watch(mapApiClientProvider));
+    MapServiceImpl(mapDioClient: ref.watch(mapApiClientProvider));
