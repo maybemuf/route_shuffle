@@ -4,7 +4,7 @@ import 'package:route_shuffle/features/map/presentation/widgets/map_action_butto
 class MapRadioButton<T> extends StatelessWidget {
   final T value;
   final T groupValue;
-  final void Function() onChanged;
+  final void Function(T value) onChanged;
   final Widget child;
 
   const MapRadioButton({
@@ -22,7 +22,7 @@ class MapRadioButton<T> extends StatelessWidget {
         return MapActionButton(
           height: constraints.maxHeight,
           width: constraints.maxWidth,
-          onPressed: onChanged,
+          onPressed: () => onChanged(value),
           backgroundColor: value == groupValue
               ? Theme.of(context).colorScheme.primary.withOpacity(.2)
               : null,
