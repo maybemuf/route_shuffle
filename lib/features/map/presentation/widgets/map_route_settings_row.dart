@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:route_shuffle/features/map/domain/entities/enums/route_type.dart';
-import 'package:route_shuffle/features/map/presentation/providers/distance_focus_node_provider.dart';
 import 'package:route_shuffle/features/map/presentation/providers/route_type_provider.dart';
-import 'package:route_shuffle/features/map/presentation/providers/unit_system_provider.dart';
 import 'package:route_shuffle/features/map/presentation/widgets/map_distance_form.dart';
 import 'package:route_shuffle/features/map/presentation/widgets/map_radio_button.dart';
 
