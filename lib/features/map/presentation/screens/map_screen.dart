@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -69,7 +70,12 @@ class MapScreen extends HookConsumerWidget {
               // const SizedBox(height: 300),
             ],
           ),
-          const MapBottomSheet(),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: const MapBottomSheet(),
+          ),
         ],
       ),
     );

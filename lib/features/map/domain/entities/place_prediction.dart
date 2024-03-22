@@ -6,7 +6,7 @@ part 'generated/place_prediction.g.dart';
 @freezed
 class PlacePrediction with _$PlacePrediction {
   const factory PlacePrediction({
-    required String placePredictionId,
+    required String placeId,
     required String description,
   }) = _PlacePrediction;
 

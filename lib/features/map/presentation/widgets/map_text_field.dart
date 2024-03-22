@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class MapTextField extends StatefulWidget {
+class MapTextField extends StatelessWidget {
   final FocusNode focusNode;
   final TextEditingController controller;
   final TextAlign textAlign;
@@ -10,6 +10,7 @@ class MapTextField extends StatefulWidget {
   final void Function()? onTap;
   final TextInputType keyboardType;
   final List<TextInputFormatter>? inputFormatters;
+  final Widget? trailing;
 
   const MapTextField({
     required this.focusNode,
@@ -20,51 +21,54 @@ class MapTextField extends StatefulWidget {
     this.hintText,
     this.onChanged,
     this.onTap,
+    this.trailing,
     super.key,
   });
 
   @override
-  State<MapTextField> createState() => _MapTextFieldState();
-}
-
-class _MapTextFieldState extends State<MapTextField> {
-  @override
-  void didUpdateWidget(covariant MapTextField oldWidget) {
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return TextField(
-      focusNode: widget.focusNode,
-      controller: widget.controller,
-      inputFormatters: widget.inputFormatters,
-      textInputAction: TextInputAction.done,
-      keyboardType: widget.keyboardType,
-      style: Theme.of(context).textTheme.bodyLarge,
-      textAlign: widget.textAlign,
-      textAlignVertical: TextAlignVertical.center,
-      onTap: widget.onTap,
-      onChanged: widget.onChanged,
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-        hintText: widget.hintText,
-        border: getInputBorder(context),
-        enabledBorder: getInputBorder(context),
-        focusedBorder: getInputBorder(context),
-        errorBorder: getInputBorder(context),
-        focusedErrorBorder: getInputBorder(context),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              focusNode: focusNode,
+              controller: controller,
+              inputFormatters: inputFormatters,
+              textInputAction: TextInputAction.done,
+              keyboardType: keyboardType,
+              style: Theme.of(context).textTheme.bodyLarge,
+              textAlign: textAlign,
+              textAlignVertical: TextAlignVertical.center,
+              onTap: onTap,
+              onChanged: onChanged,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                hintText: hintText,
+                border: getInputBorder(context),
+                enabledBorder: getInputBorder(context),
+                focusedBorder: getInputBorder(context),
+                errorBorder: getInputBorder(context),
+                focusedErrorBorder: getInputBorder(context),
+              ),
+            ),
+          ),
+          if (trailing != null) ...[
+            const SizedBox(width: 4),
+            trailing!,
+          ],
+        ],
       ),
     );
   }
 
   OutlineInputBorder getInputBorder(BuildContext context) {
-    return OutlineInputBorder(
-      gapPadding: 0,
-      borderRadius: BorderRadius.circular(5),
-      borderSide: BorderSide(
-        color: Theme.of(context).colorScheme.primary,
-      ),
-    );
+    return const OutlineInputBorder(gapPadding: 0, borderSide: BorderSide.none);
   }
 }
